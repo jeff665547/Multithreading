@@ -1,0 +1,4 @@
+/Users/jeff/Desktop/jthread/build/CMakeFiles/jthread_construct.dir
+/Users/jeff/Desktop/jthread/build/CMakeFiles/jthread.dir
+/Users/jeff/Desktop/jthread/build/CMakeFiles/edit_cache.dir
+/Users/jeff/Desktop/jthread/build/CMakeFiles/rebuild_cache.dir

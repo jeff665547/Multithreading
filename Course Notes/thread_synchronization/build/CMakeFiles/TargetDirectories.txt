@@ -1,0 +1,6 @@
+/Users/jeff/Desktop/thread_synchronization/build/CMakeFiles/condition_variables.dir
+/Users/jeff/Desktop/thread_synchronization/build/CMakeFiles/condition_variables_with_predicate.dir
+/Users/jeff/Desktop/thread_synchronization/build/CMakeFiles/futures_and_promises.dir
+/Users/jeff/Desktop/thread_synchronization/build/CMakeFiles/promises_with_multiple_waiting_threads.dir
+/Users/jeff/Desktop/thread_synchronization/build/CMakeFiles/edit_cache.dir
+/Users/jeff/Desktop/thread_synchronization/build/CMakeFiles/rebuild_cache.dir

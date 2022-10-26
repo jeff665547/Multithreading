@@ -1,0 +1,10 @@
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/Integer_operations_and_threads.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/Atomic_types.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/hw.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/hw6.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/queue_thread.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/Read-write.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/Read-write2.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/tmp.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/edit_cache.dir
+/Users/jeff/Desktop/Atomic_Types/build/CMakeFiles/rebuild_cache.dir

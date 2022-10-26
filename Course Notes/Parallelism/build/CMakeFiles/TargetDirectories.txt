@@ -1,0 +1,3 @@
+/Users/jeff/Desktop/Parallelism/build/CMakeFiles/Quick_sort.dir
+/Users/jeff/Desktop/Parallelism/build/CMakeFiles/edit_cache.dir
+/Users/jeff/Desktop/Parallelism/build/CMakeFiles/rebuild_cache.dir

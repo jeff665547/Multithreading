@@ -1,0 +1,3 @@
+/Users/jeff/Desktop/Coroutine/build/CMakeFiles/Coroutine_basic.dir
+/Users/jeff/Desktop/Coroutine/build/CMakeFiles/edit_cache.dir
+/Users/jeff/Desktop/Coroutine/build/CMakeFiles/rebuild_cache.dir
