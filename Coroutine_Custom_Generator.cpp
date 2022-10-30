@@ -14,14 +14,18 @@
 template<typename T> // C++ compiler要求此wrapping class一定要是templated class。
 class Generator{
 public:
-    struct promise_type;  // C++規定此類別內要有promise_type(定義或宣告) -> Nested calss design pattern for wrapping interface.
+    struct promise_type;  // C++規定此類別內要有promise_type(定義或宣告) 
+    // -> Nested calss design pattern for wrapping interface.
+    // Compiler 會自動去 call promise_type 裡面對應的 interface.
+
     using coro_handle = std::coroutine_handle<promise_type>;
     // 建立此 wrapping class 時要提供 coroutine handle 當成參數。
     // 以便後續對 coroutine handle 進行操作。
     Generator(coro_handle h) : handle(h) {}
     bool resume() {
-        if(!handle.done()) handle.resume();
-        return !handle.done();
+        if(!handle.done()) handle.resume();  // handle.resume() 與 handle() 意思一樣，都是接著繼續執行。
+        return !handle.done(); // done() is used to checks if a suspended coroutine is suspended 
+                               // at its final_suspended point.
     }
     T get_value() {
         return handle.promise().value;
@@ -37,7 +41,10 @@ public:
 template<typename T>
 struct Generator<T>::promise_type{
     // (Essential) Returns the constructed coroutine object. (Store the coroutine 
-    //             in the returned Generator (customized class) object)
+    //             handle associated with the promise_type object in the 
+    //             returned Generator (customized class) object)
+    //             The return type of this method has to be the same as the 
+    //             outer nested class.
     Generator get_return_object(){
         return std::coroutine_handle<promise_type>::from_promise(*this);
     }
@@ -48,10 +55,16 @@ struct Generator<T>::promise_type{
     std::suspend_always initial_suspend() {
         return {};
     }
-    // (Essential) (return awaitables) Determines if the coroutine suspends 
-    //             before it ends (at its end).
+    // (Essential) (return awaitables) Determines if the coroutine suspends one last time
+    //             after the coroutine has ended execution (at its end).
+    //             - If it returns suspend_always, that means the state is saved, and users of the 
+    //               coroutine can access data in this promise_type or do whatever users intend to do.
+    //               In this case, the coroutine handle should be manually destroyed by the wrapping 
+    //               class (i.e. Generator in this case).
     std::suspend_always final_suspend() noexcept { 
-        // the noexcept keyword is required in this function by C++ compiler and the protocol.
+        // The noexcept keyword is required in this function by the C++ compiler and the protocol.
+        // The noexcept keyword can optimize the compiler code (the concept of reducing try-catch)
+        // to improve the execution speed.
         return {};
     }
     // (Optional) (return awaitables) Is invoked by co_yield val. co_yield val -> yield_value(val)
@@ -151,9 +164,9 @@ Generator<T> infinite_seq(T begin, T step){
 // 
 // * The transformed awaiter workflow
 // awaiter.await_ready() returns 
-//     false: // (A) -> suspend coroutine & copy the coroutine state into the 
-//                      coroutine frame (on the heap). It's an optimization 
-//                      parameter.
+//     false: // (A) -> suspend coroutine & copy the coroutine (execution) state 
+//                      into the coroutine frame (on the heap). It's an 
+//                      optimization parameter. 
 //     awaiter.await_suspend(coroutineHandle) returns:
 //         void: // (a)
 //             awaiter.await_suspend(coroutineHandle); 
@@ -165,12 +178,14 @@ Generator<T> infinite_seq(T begin, T step){
 //                 // -> coroutine keep suspended
 //                 return to caller 
 //             else:
-//                 // -> go to resumptionPoint
+//                 // -> go to resumptionPoint (but the suspension has occured. -> wasting resources.)
 //         another coroutine handle: // (c)
 //             auto anotherCoroutineHandle = awaiter.await_suspend(coroutineHandle); 
 //             anotherCoroutineHandle.resume();
 //             return to caller
-//     true: // (B) -> go to the resumptionPoint, no suspension occur.
+//     true: // (B) -> go to the resumptionPoint, no suspension occur (the cost of copying the local
+//                     variables to the coroutine frame can be avoided and the coroutine state will
+//                     not be saved -> optimize the process).
 // // resumptionPoint:
 // return awaiter.await_resume();
 // 

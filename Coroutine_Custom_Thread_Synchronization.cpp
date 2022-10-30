@@ -36,11 +36,16 @@ public:
         // - std::coroutine_handle has two kinds of template parameters (void, 
         //   std::promise_type):
         //   When to use: If we need the promise_type to do something (e.g. use 
-        //   from_promise to create a coroutine handle object), 
+        //   from_promise static method to create a coroutine handle object), 
         //   then we need to use the std::promise_type version. 
         //   Ortherwise, we use the void version. The std::coroutine_handle 
         //   with the std::promise_type template version can be implicitly 
         //   converted to the void version.
+        // - await_suspend可以被利用來執行同步(synchronous, e.g. launch a new thread)或是異步
+        //   (asynchronous, e.g. std::async)的程式碼。
+        // - await_suspend的參數除了是一般的std::coroutine_handle之外，也可以將此method改寫成templated function
+        //   透過此參數引入外部的coroutine_handle，如task::coroutine_handle，利用此參數的promise()中的成員來
+        //   在caller以及Awaiter內部之間傳遞資料。
         void await_suspend(std::coroutine_handle<> han){
             handle = han;  // 這邊將coroutine handle給存起來，以供後續resume時使用。
             if(ev.notified){
